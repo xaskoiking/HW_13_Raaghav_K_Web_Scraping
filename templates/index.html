@@ -30,8 +30,17 @@
         </div>
 
          <div class="row">
-             <img src={{featured_image_url}} alt="Mars">
-
+            <div class="col-sm-6">
+                <b> <h2 id="myHeader">Featured Mass Image</h2></b>
+                <img class="img-responsive" src={{marsDetail.featured_image_url}} alt="Mars">
+            </div>
+            <div class="col-sm-6">
+                <div class="thumbnail">
+                <b><p>Current Weather on Mars</p></b>
+                <hr style="width: 100%; color: grey" />
+                <p>{{ marsDetail.mars_weather}}</p>
+                </div>
+            </div>
         </div>
         {% endfor %}
 
