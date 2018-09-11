@@ -12,23 +12,28 @@
 <body>
 
     <div class="container">
-        <div class="jumbotron">
-            <h1>Costa Rica Weather</h1>
-            <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Get Forecast!</a></p>
+        <div class="jumbotron container">
+            <h1 align="center">Mission to Mars</h1>
+            <p align="center"><a class="btn btn-primary btn-lg" href="/scrape" role="button" >Scrape New Data</a></p>
 
         </div>
 
-            {% for forecast in forecasts%}
-                    <div class="col-lg-4">
-                            <div class="card" style="width: 20rem;">
-                                <div class="card-body">
-                                  <h4 class="card-title">Costa Rica</h4>
-                                  <h6 class="card-subtitle mb-2 text-muted">{{ forecast.newsParaText }} - {{ forecast.newsParaText }}: {{ forecast.featured_image_url }} | {{forecast.featured_image_url}}</h6>
-                                  <p class="card-text">Surf: {{ forecast.newsTitle }} | {{ forecast.newsParaText }}</p>
-                                </div>
-                              </div>
-                          </div>
-            {% endfor %}
+        {% for marsDetail in marsDetails%}
+        <div class="row">
+            <div class="col-sm-12">
+                <b> <h2 id="myHeader">Latest Mars News</h2></b>
+                    <div class="span4">
+                        <b><p>{{ marsDetail.news_title}}</p></b>
+                        <p>{{ marsDetail.news_p}}</p>
+                    </div>
+            </div>
+        </div>
+
+         <div class="row">
+             <img src={{featured_image_url}} alt="Mars">
+
+        </div>
+        {% endfor %}
 
     </div>
 
