@@ -1,6 +1,7 @@
 #Importing Dependencies
 from splinter import Browser
 from bs4 import BeautifulSoup
+import pandas as pd
 
 ######----------Declaring variables----------######
 
@@ -12,6 +13,9 @@ mars_image = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
 
 #3.0) URL to get twitter details
 twitter_details = "https://twitter.com/marswxreport?lang=en"
+
+#4.0) URL to get MARS facts
+mars_facts = "https://space-facts.com/mars/"
 
 ######----------Declaring Functions----------######
 
@@ -72,12 +76,30 @@ def scrape_marsDetails():
         if("Sol" in a.find('p').text and "pressure" in a.find('p').text and "daylight" in a.find('p').text and counter == 0):
             mars_weather = a.find('p').text
             counter = counter + 1
+    #4.0) URL to get Mars Facts
+    #----------------------------------------------------------
+    #This is to get the Mars Facts
+
+    #Scraping the URL
+    browser.visit(mars_facts)
+    html = browser.html
+    soup = BeautifulSoup(html, "html.parser")
+
+    #Finding all the facts
+    tables = pd.read_html(mars_facts)
+    df = tables[0]
+    df.columns = ['desc', 'facts']
+
+    desc = df["desc"].values.tolist()
+    facts = df["facts"].values.tolist()
     #----------------------------------------------------------
     marsDetails = {
             "news_p": news_p,
             "news_title": news_title,
             "featured_image_url": featured_image_url,
-            "mars_weather": mars_weather
+            "mars_weather": mars_weather,
+            "desc":desc,
+            "facts":facts
         }
 
     return marsDetails;
