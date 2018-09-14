@@ -17,6 +17,9 @@ twitter_details = "https://twitter.com/marswxreport?lang=en"
 #4.0) URL to get MARS facts
 mars_facts = "https://space-facts.com/mars/"
 
+#5.0) URL to get MARS Hemisphere
+mars_hemisphere = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+
 ######----------Declaring Functions----------######
 
 # Function to call the chrome driver
@@ -92,14 +95,58 @@ def scrape_marsDetails():
 
     desc = df["desc"].values.tolist()
     facts = df["facts"].values.tolist()
+    
+    #5.0) URL to get Mars Facts
     #----------------------------------------------------------
+    #To get the MARS image details
+    #Scraping the URL
+    browser.visit(mars_hemisphere)
+    html = browser.html
+    soup = BeautifulSoup(html, 'html.parser')
+
+    #marsHemisphere
+    marsHemisphere = soup.findAll('div', attrs={'class': 'item'})
+
+    #Adding the text to the lit, so that you can use the linktext
+    imageTextList = []
+
+    #Iterating the class -- item and storing the tex
+    for a in marsHemisphere:
+        for b in a.findAll('a'):
+            if(len(b.text) > 0):
+                imageTextList.append(b.text)
+    
+    #Creating a list to store the dictionaries
+    hemisphere_image_urls = []
+
+    #Iteraing the text and adding the text and URL for the last module of the web page
+    for text in imageTextList:
+    #Parent Page
+    browser.visit(mars_hemisphere)
+    html = browser.html
+    
+    #Click Action
+    browser.click_link_by_partial_text(text)
+    
+    #Child Page
+    html = browser.html
+    soup = BeautifulSoup(html, 'html.parser')
+    image = soup.findAll('img')
+    for a in image:
+        if('full' in a.get('src')):
+            dictDetails = {'title':text, 'img_url' : 'https://astrogeology.usgs.gov' + a.get('src') }
+            hemisphere_image_urls.append(dictDetails)
+        
+    #----------------------------------------------------------
+    
     marsDetails = {
             "news_p": news_p,
             "news_title": news_title,
             "featured_image_url": featured_image_url,
             "mars_weather": mars_weather,
             "desc":desc,
-            "facts":facts
+            "facts":facts,
+            "hemisphere_image_urls":hemisphere_image_urls
         }
 
     return marsDetails;
