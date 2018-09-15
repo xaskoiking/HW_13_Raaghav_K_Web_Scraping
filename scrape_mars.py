@@ -118,24 +118,28 @@ def scrape_marsDetails():
     
     #Creating a list to store the dictionaries
     hemisphere_image_urls = []
+    titleList = []
+    imageList = []
 
     #Iteraing the text and adding the text and URL for the last module of the web page
     for text in imageTextList:
-    #Parent Page
-    browser.visit(mars_hemisphere)
-    html = browser.html
+        #Parent Page
+        browser.visit(mars_hemisphere)
+        html = browser.html
     
-    #Click Action
-    browser.click_link_by_partial_text(text)
+        #Click Action
+        browser.click_link_by_partial_text(text)
     
-    #Child Page
-    html = browser.html
-    soup = BeautifulSoup(html, 'html.parser')
-    image = soup.findAll('img')
-    for a in image:
-        if('full' in a.get('src')):
-            dictDetails = {'title':text, 'img_url' : 'https://astrogeology.usgs.gov' + a.get('src') }
-            hemisphere_image_urls.append(dictDetails)
+        #Child Page
+        html = browser.html
+        soup = BeautifulSoup(html, 'html.parser')
+        image = soup.findAll('img')
+        for a in image:
+            if('full' in a.get('src')):
+                dictDetails = {'title':text, 'img_url' : 'https://astrogeology.usgs.gov' + a.get('src') }
+                titleList.append(text)
+                imageList.append('https://astrogeology.usgs.gov' + a.get('src') )
+                hemisphere_image_urls.append(dictDetails)
         
     #----------------------------------------------------------
     
@@ -146,6 +150,8 @@ def scrape_marsDetails():
             "mars_weather": mars_weather,
             "desc":desc,
             "facts":facts,
+            "titleList": titleList,
+            "imageList":imageList,
             "hemisphere_image_urls":hemisphere_image_urls
         }
 
